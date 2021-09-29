@@ -1,8 +1,10 @@
 import { element } from './utils.js';
+import Clicker from './Clicker.js';
 
 export default class App {
   constructor() {
     this.render();
+    Clicker();
   }
   template() {
     return `
