@@ -30,13 +30,13 @@ export default class Todos {
   render() {
     this.section = create('section', { id: 'todos-container'});
     this.elems = {
-      h3: create('h3', { textContent: 'Todos'}),
-      input: create('input', { placeholder: 'Enter...' }),
+      header: create('h3', { textContent: 'Todos'}),
+      input: create('input', { placeholder: 'Enter...', id: 'todo-input' }),
       addBtn: create('button', { textContent: 'Add todo',  disabled: true }),
-      resetBtn: create('button', { textContent: 'Reset todo', disabled: true }),
+      resetBtn: create('button', { textContent: 'Reset todos', disabled: true }),
       list: create('div')
     };
-    Object.entries(this.elems).forEach(([key, value]) => this.section.appendChild(value));
+    Object.values(this.elems).forEach(elem => this.section.appendChild(elem));
   }
 
   bindEvents() {
