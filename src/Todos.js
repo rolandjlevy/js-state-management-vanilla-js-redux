@@ -1,6 +1,6 @@
 import store from '../store/index.js';
 import { addTodo, deleteTodo, resetTodos, updateTodo } from '../store/actions.js';
-import { element, elements, create } from './utils.js';
+import { element, create } from './utils.js';
 
 export default class Todos {
 
@@ -40,7 +40,6 @@ export default class Todos {
   }
 
   bindEvents() {
-
     this.elems.addBtn.addEventListener('click', () => {
       const todo = {
         id: this.id++,
@@ -50,19 +49,15 @@ export default class Todos {
       this.todoList();
       this.elems.resetBtn.disabled = false;
     });
-    
     this.elems.resetBtn.addEventListener('click', (e) => {
       store.dispatch(resetTodos());
       this.todoList();
       e.target.disabled = true;
     });
-
     this.elems.input.addEventListener('keyup', (e) => {
       this.elems.addBtn.disabled = !e.target.value.length;
       store.dispatch(updateTodo(e.target.value));
     });
-
   }
 
-  
 }
