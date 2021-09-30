@@ -3,6 +3,7 @@ import {
   DEC_COUNTER, 
   ADD_TODO,
   DELETE_TODO,
+  RESET_TODOS,
   UPDATE_TODO
 } from './actionTypes.js';
 
@@ -25,6 +26,12 @@ export const deleteTodo = (id) => {
   return { 
     type: DELETE_TODO,
     payload: id
+  }
+}
+
+export const resetTodos = () => {
+  return { 
+    type: RESET_TODOS
   }
 }
 

@@ -3,27 +3,32 @@ import Clicker from './Clicker.js';
 import Todos from './Todos.js';
 
 export default class App {
+
   constructor() {
+    this.clicker = new Clicker();
+    this.todos = new Todos();
     this.render();
-    Clicker();
-    Todos();
+    this.clicker.bindEvents();
+    this.clicker.updateCounter();
+    this.todos.bindEvents();
   }
+
   template() {
     return `
-      <h2>Redux with Vanilla JS</h2>
+      <header>
+        <h2>Redux with Vanilla JS</h2>
+      </header>
       <section>
-        <h3>Counter: <span id="counter"></span></h3>
-        <button id="btn-dec">decrease -</button>
-        <button id="btn-inc">increase +</button>
+        ${this.clicker.template()}
       </section>
       <section>
-        <input id="todo-input" placeholder="Enter..." />
-        <button id="todo-add" disabled>Add todo</button>
-        <div id="todos-list"></div>
+        ${this.todos.template()}
       </section>
     `
   }
+
   render() {
     element('#app').innerHTML = this.template();
   }
+  
 }

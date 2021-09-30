@@ -3,13 +3,14 @@ import {
   DEC_COUNTER, 
   ADD_TODO,
   DELETE_TODO,
+  RESET_TODOS,
   UPDATE_TODO
 } from './actionTypes.js';
 
 const initialSate = {
   counter: 0,
-  todos: [],
-  currentTodo: ''
+  currentTodo: '',
+  todos: []
 }
 
 const reducer = (state = initialSate, action) => {
@@ -30,13 +31,16 @@ const reducer = (state = initialSate, action) => {
         todos: [...state.todos, action.payload]
       }
     case DELETE_TODO:
-      const updatedTodos = state.todos.filter(item => {
-        console.log('item.id:',item.id, 'action.payload:', action.payload);
-        return item.id != action.payload;
-      })
+    const updatedTodos = state.todos.filter(item => item.id != action.payload);
+    console.log('id payload', action.payload, { updatedTodos})
       return {
         ...state,
         todos: updatedTodos
+      }
+    case RESET_TODOS:
+      return {
+        ...state,
+        todos: []
       }
     case UPDATE_TODO:
       return {
