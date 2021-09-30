@@ -31,8 +31,7 @@ const reducer = (state = initialSate, action) => {
         todos: [...state.todos, action.payload]
       }
     case DELETE_TODO:
-    const updatedTodos = state.todos.filter(item => item.id != action.payload);
-    console.log('id payload', action.payload, { updatedTodos})
+    const updatedTodos = state.todos.filter(item => item.id !== action.payload);
       return {
         ...state,
         todos: updatedTodos

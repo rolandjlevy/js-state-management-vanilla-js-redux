@@ -1,67 +1,68 @@
 import store from '../store/index.js';
 import { addTodo, deleteTodo, resetTodos, updateTodo } from '../store/actions.js';
-import { element, elements } from './utils.js';
+import { element, elements, create } from './utils.js';
 
 export default class Todos {
 
   constructor() {
-    this.id = 1
+    this.id = 1;
+    this.render();
+    this.bindEvents();
   }
-deleteTodo
+  
+  todoList() {
+    if (this.elems.list.firstChild) this.elems.list.firstChild.remove();
+    const ul = create('ul');
+    store.getState().todos.forEach(item => {
+      const deleteBtn = create('button', { textContent: '×' });
+      deleteBtn.addEventListener('click', (e) => {
+        store.dispatch(deleteTodo(item.id));
+        e.target.parentNode.remove();
+        this.elems.resetBtn.disabled = !store.getState().todos.length;
+      });
+      const li = create('li', { textContent: `${item.id}: ${item.text}` });
+      li.appendChild(deleteBtn);
+      ul.appendChild(li);
+    });
+    this.elems.list.appendChild(ul);
+  }
+
+  render() {
+    this.section = create('section', { id: 'todos-container'});
+    this.elems = {
+      h3: create('h3', { textContent: 'Todos'}),
+      input: create('input', { placeholder: 'Enter...' }),
+      addBtn: create('button', { textContent: 'Add todo',  disabled: true }),
+      resetBtn: create('button', { textContent: 'Reset todo', disabled: true }),
+      list: create('div')
+    };
+    Object.entries(this.elems).forEach(([key, value]) => this.section.appendChild(value));
+  }
+
   bindEvents() {
-    element('#todo-add').addEventListener('click', () => {
+
+    this.elems.addBtn.addEventListener('click', () => {
       const todo = {
         id: this.id++,
         text: store.getState().currentTodo
       }
       store.dispatch(addTodo(todo));
-      this.renderTodosList();
-      this.bindDeleteButtons();
-      element('#todos-reset').disabled = false;
+      this.todoList();
+      this.elems.resetBtn.disabled = false;
     });
     
-    element('#todos-reset').addEventListener('click', (e) => {
+    this.elems.resetBtn.addEventListener('click', (e) => {
       store.dispatch(resetTodos());
-      this.renderTodosList();
+      this.todoList();
       e.target.disabled = true;
     });
 
-    element('#todo-input').addEventListener('keyup', (e) => {
-      element('#todo-add').disabled = !e.target.value.length;
+    this.elems.input.addEventListener('keyup', (e) => {
+      this.elems.addBtn.disabled = !e.target.value.length;
       store.dispatch(updateTodo(e.target.value));
     });
+
   }
 
-  bindDeleteButtons() {
-    elements('#todos-list button').forEach(item => {
-      console.log('forEach > id:', item.id);
-      item.addEventListener('click', (e) => {
-        const id = Number(item.id.split('-')[1]);
-        console.log('clicked id', id, item.id);
-        store.dispatch(deleteTodo(id));
-        this.renderTodosList();
-      });
-    });
-  }
-
-  renderTodosList() {
-    let html = '<ul>';
-    store.getState().todos.forEach(item => {
-      const deleteBtn = `<button id="delete-${item.id}">&times;</button>`;
-      html += `<li><span>${item.id}: ${item.text}</span> ${deleteBtn}</li>`; 
-    });
-    html += '</ul>';
-    element('#todos-list').innerHTML = html;
-  }
-
-  template() {
-    return `
-      <h3>Todos</h3>
-      <input id="todo-input" placeholder="Enter..." />
-      <button id="todo-add" disabled>Add todo</button>
-      <button id="todos-reset" disabled>Reset todos</button>
-      <div id="todos-list"></div>
-    `;
-  }
   
 }
