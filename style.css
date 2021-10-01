@@ -43,3 +43,14 @@ ul > li {
   margin-bottom: 10px;
   box-shadow: 0 5px 5px -5px rgb(0 0 0 / 30%)
 }
+
+.fade-in {
+  animation: fadeInAnimation ease-in 2s;
+  animation-iteration-count: 1; 
+  animation-fill-mode: forwards; 
+}
+
+@keyframes fadeInAnimation { 
+  0% { opacity: 0; } 
+  100% { opacity: 1; } 
+} 

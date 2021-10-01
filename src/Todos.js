@@ -1,6 +1,6 @@
 import store from '../store/index.js';
 import { addTodo, deleteTodo, resetTodos, updateTodo } from '../store/actions.js';
-import { element, create } from './utils.js';
+import { element, create, appendChildElements } from './utils.js';
 
 export default class Todos {
 
@@ -8,6 +8,18 @@ export default class Todos {
     this.id = 1;
     this.render();
     this.bindEvents();
+  }
+
+  render() {
+    this.section = create('section', { id: 'todos-container'});
+    this.elems = {
+      header: create('h3', { textContent: 'Todos'}),
+      input: create('input', { placeholder: 'Enter...', id: 'todo-input' }),
+      addBtn: create('button', { textContent: 'Add',  disabled: true }),
+      resetBtn: create('button', { textContent: 'Reset', disabled: true }),
+      list: create('div')
+    };
+    appendChildElements({ parent: this.section, children:this.elems });
   }
   
   todoList() {
@@ -27,18 +39,6 @@ export default class Todos {
     this.elems.list.appendChild(ul);
   }
 
-  render() {
-    this.section = create('section', { id: 'todos-container'});
-    this.elems = {
-      header: create('h3', { textContent: 'Todos'}),
-      input: create('input', { placeholder: 'Enter...', id: 'todo-input' }),
-      addBtn: create('button', { textContent: 'Add todo',  disabled: true }),
-      resetBtn: create('button', { textContent: 'Reset todos', disabled: true }),
-      list: create('div')
-    };
-    Object.values(this.elems).forEach(elem => this.section.appendChild(elem));
-  }
-
   bindEvents() {
     this.elems.addBtn.addEventListener('click', () => {
       const todo = {
@@ -51,8 +51,11 @@ export default class Todos {
     });
     this.elems.resetBtn.addEventListener('click', (e) => {
       store.dispatch(resetTodos());
+      this.id = 1;
       this.todoList();
       e.target.disabled = true;
+      store.dispatch(updateTodo(''));
+      this.elems.input
     });
     this.elems.input.addEventListener('keyup', (e) => {
       this.elems.addBtn.disabled = !e.target.value.length;

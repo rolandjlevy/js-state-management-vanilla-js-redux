@@ -7,7 +7,7 @@ export default class Todos {
   constructor() {
     this.id = 1
   }
-deleteTodo
+
   bindEvents() {
     element('#todo-add').addEventListener('click', () => {
       const todo = {
